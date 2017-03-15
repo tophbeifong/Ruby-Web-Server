@@ -32,6 +32,19 @@ class Server
 
     return "text/html; utf-8" if(open_directory(filename))
 
+    common_ones = [["css","text/css"],["html","text/html"]]
+    for mime in common_ones
+
+      file_type = filename.split(".")
+
+      if file_type[file_type.length - 1] == mime[0]
+
+        return mime[1]
+
+      end
+
+    end
+
     return content_type = true_mime_type = `file --mime -b #{@current_directory}/www/#{@default_public_directory}#{filename}`.chomp
   end
 
@@ -55,7 +68,9 @@ class Server
   def return_dynamic_file(dir_name)
 
     #html template for open directory view
-    document_top = '<!doctype html><html><head><title>' + dir_name + '</title></head><body><h1>Viewing: ' + dir_name + '</h1><hr /><ul>'
+    styles = File.read("#{@current_directory}/www/sys/default.css")
+    puts styles
+    document_top = '<!doctype html><html><head><title>' + dir_name + '</title><style>' + styles + '</style></head><body><h1>Viewing: ' + dir_name + '</h1><hr /><ul>'
     document_content = ''
     document_bot = '</ul><hr /><p><i>Ruby WebServer 2.0.1 - Beta: ' + @current_directory + '/www/public_html/' + dir_name + '</i></p></body></html>'
 
